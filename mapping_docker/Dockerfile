@@ -41,7 +41,8 @@ RUN sudo apt-get install -y \
 RUN sudo apt-get update && apt install -y\
     ros-melodic-laser-scan-matcher \
     ros-melodic-rtabmap-ros \
-    ros-melodic-hector-slam
+    ros-melodic-hector-slam \
+    ros-melodic-depthimage-to-laserscan
 
 RUN dpkg --add-architecture i386 && \
     apt-get update && apt-get install -y --no-install-recommends \
