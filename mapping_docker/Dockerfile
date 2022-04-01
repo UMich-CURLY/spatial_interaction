@@ -37,9 +37,11 @@ RUN sudo apt-get install -y \
     cmake \
     autoconf
 
-# Installing gedit
-RUN sudo apt-get install -y\
-    gedit
+# Installing rtabmap
+RUN sudo apt-get update && apt install -y\
+    ros-melodic-laser-scan-matcher \
+    ros-melodic-rtabmap-ros \
+    ros-melodic-hector-slam
 
 RUN dpkg --add-architecture i386 && \
     apt-get update && apt-get install -y --no-install-recommends \
@@ -81,9 +83,8 @@ RUN scons build/bin/local_topo_hssh -j12
 RUN echo "source ~/catkin_ws/devel/setup.bash" >> ~/.bashrc
 
 
-
-ENV ROS_MASTER_URI=http://localhost:11311
+WORKDIR /root/catkin_ws/src/ros2lcm/src/Vulcan
+ENV ROS_MASTER_URI=http://172.17.0.1:11311
+ENV ROS_IP=172.17.0.1
 ENV DISPLAY=unix$DISPLAY
 ENV LIBGL_ALWAYS_INDIRECT=1
-RUN echo "192.168.88.11    fetch37" >> /etc/hosts
-# RUN git clone -b master https://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:x-oath-basic@github.com/

@@ -21,5 +21,5 @@ docker run -it --rm --net=host\
     --env="XAUTHORITY=$XAUTH" \
     --volume="$XAUTH:$XAUTH" \
     --gpus all \
-    dockerv1 \
+    sim \
     bash
