@@ -1,6 +1,11 @@
-# vulcan_docker
-Install docker-ce and then install the NVIDIA Container Toolkit using this link:
+# spatial_interaction
+We work on two separate docker environments and set the master as your host PC. For visualizations to work, we enable our docker to use the system GPU. To do so: Install docker-ce and then install the NVIDIA Container Toolkit using this link:
 https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html
+
+
+
+# vulcan_docker
+
 
 Finally, run these commands to clone this repo and build an image:
 
@@ -39,4 +44,3 @@ Now run
   sudo docker commit <container ID> dockerv1
   ```
   Next time you start the session, any changes done previously will be saved.
-# spatial_interaction
