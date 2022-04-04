@@ -54,14 +54,13 @@ ENV MAGNUM_LOG="quiet"
 
 WORKDIR /home
 
-RUN git clone --recursive https://tribhi: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@github.com/UMich-CURLY/tourguide_routing_matching.git matching_routing
 
 RUN mkdir catkin_ws && cd catkin_ws && mkdir src && cd src
 WORKDIR /home/catkin_ws/src
 
 RUN git config --global user.email "tribhi@umich.edu"
 RUN git config --global user.name "tribhi"
-RUN git clone --recursive --branch single_robot https://tribhi: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@github.com/UMich-CURLY/habitat_ros_interface.git
+RUN git clone --recursive --branch single_robot https://github.com/UMich-CURLY/habitat_ros_interface.git
 RUN git clone --recursive https://github.com/ros-teleop/teleop_twist_keyboard.git 
 RUN conda create -n robostackenv python=3.9 -c conda-forge
 RUN /bin/bash -c ". activate robostackenv; conda config --env --add channels conda-forge; conda config --env --add channels robostack-experimental; conda config --env --add channels robostack; conda config --env --set channel_priority strict"
