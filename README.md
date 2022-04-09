@@ -2,6 +2,8 @@
 We work on two separate docker environments and set the master as your host PC. For visualizations to work, we enable our docker to use the system GPU. To do so: Install docker-ce and then install the NVIDIA Container Toolkit using this link:
 https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html
 
+<center><img src="./Diagram_width.png" width="850"></center>
+
 ![alt text](./small_tour.gif)
 <br />
 
