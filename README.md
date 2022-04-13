@@ -19,9 +19,8 @@ https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.
 Finally, run these commands to clone this repo and build an image:
 
 ```bash
-cd ~
-git clone https://github.com/UMich-CURLY/vulcan_docker.git
-sudo docker build vulcan_docker/ --tag dockerv1
+cd mapping_docker
+sudo docker build --tag mapper .
 ```
 
 Run the bash file as follows:
