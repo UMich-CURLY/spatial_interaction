@@ -13,10 +13,52 @@ Our input sensors are RGB-D cameras only, we estimate odometry using a visual od
 We work on two separate docker environments and set the master as your host PC. For visualizations to work, we enable our docker to use the system GPU. To do so: Install docker-ce and then install the NVIDIA Container Toolkit using this link:
 https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html
 
-# vulcan_docker
+# planning_sim_docker 
 
+Get in the ``planning_sim_docker`` folder in the root of this repository. Build the docker using the following command:
+```bash
+cd planning_sim_docker
+sudo docker build --tag sim .
+```
+Now you can run the code inside the docker, however we need to load the Matterport3D dataset inside the docker. We recommend you place the data in a folder called data inside the current directory where you launch the docker. 
+To load the data in your container, make sure you have the Matterport data saved in the cloned repository. You can download the data from habitat_lab repository https://github.com/facebookresearch/habitat-lab or use the snippet of data in "GET LINK". If you save the path outside of thr current repository of the shell script, make sure to change the path to the data on your machine to be loaded correctly in your docker container. Finally, Run the bash file as follows:
+```bash
+./launch_docker.sh
+```
 
-Finally, run these commands to clone this repo and build an image:
+Inside your docker container, you will find that all the associated code in the right path.
+  
+  Namely we have one main repositories in our docker path:
+  
+  1. habitat_ros_interface: Runs the habitat-sim simulation in a ros package using the map from rtabmap_ros, move_base for navigation. 
+
+  Moreover there are 2 conda environments in your docker environment. 
+  1. habitat - Based in python3.8 and runs all the files related to habitat_sim and habitat_lab
+  2. robostackenv - Based in python3.9 and runs everything in ros noetic
+ 
+  Once you're in your docker continue to run the following statements 
+  
+  ```bash
+    . activate robostackenv
+    cd /home/catkin_ws
+    catkin_make
+    source /home/catkin_ws/devel/setup.bash
+    roslaunch habitat_interface default.launch
+  ```
+  
+  This should have set up your ros interface with habitat. Now lets start our simulator threads.
+  In another terminal inside your docker (docker exec -it <container_id> /bin/bash), run the following:
+  
+  ```bash
+    . activate habitat
+    cd /home/catkin_ws/src/habitat_ros_interface
+    python scripts/using_teleport.py
+  ```
+
+# mapping_docker
+
+Next is the mapper, that can build a topological graph given a 2D map, that we obtain from rtabmap_ros.
+Finally, run these commands to build an image:
 
 ```bash
 cd mapping_docker
@@ -26,29 +68,19 @@ sudo docker build --tag mapper .
 Run the bash file as follows:
 
 ```bash
-cd vulcan_docker/
 sudo chmod +x vulcan_image.sh
 sudo ./vulcan_image.sh
 ```
-  
-Now run 
-  1. catkin_make - to built packages
-  2. roslaunch ros2lcm get_pose.launch - to launch gazebo, rviz, gmapping
-  3. rosrun ros2lcm ros2lcm_node - to convcert ros to lcm messages 
-  4. cd src/ros2lcm/src/Vulcan - This is the location of the already built binaries for Vulcan Package
-  5. ./start_debug_ui - to open Vulcan Visualization
-  
-  To end the session, type ```exit```. 
-  
-  Optionally you can commit the changes, do the following. First, check the last container ID using:
-  
-  ```bash
-  docker ps -lq
-  ```
-  
-  Then run the following command to commit the changes:
-  
-  ```bash
-  sudo docker commit <container ID> dockerv1
-  ```
-  Next time you start the session, any changes done previously will be saved.
+Inside the docker run the following commands:
+
+```bash 
+cd ~/catkin_ws
+catkin_make
+roslaunch ros2lcm navigate.launch 
+```
+You can run the launch file navigate.launch in the ros2lcm package to start mapping and then save the resultant database file, called rtabmap.db by default from /root/.ros folder and save it for use in localization mode only.
+
+In another terminal inside your docker (docker exec -it <container_id> /bin/bash), launch move_base planners, where the global planner is using our plugin that can return voronoi paths from our pre-built topological map. Launch the move_base server as: ``` roslaunch ros2lcm move_base_habitat.launch ```. 
+
+
+Finally if you Rviz with the config file in the mapper docker, you should be able to see your robot in the habitat_sim navigation environment. Make sure that robot is well localized and the map is visible before running your tour planner. To start the tour planner, "Publish Point" anywhere in the map. This will show the calculated path for the robots, and also execute them. 
