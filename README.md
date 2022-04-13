@@ -2,6 +2,9 @@
 This repository contains our work on developing an interactive mapping and planning pipeline for socially assistive robots. We use the photo-realistic Habitat-sim as the simulation environment for running this framework. Our framework consists of a mapping and a planning module, each of which are included here in two separate dockers. Our topological graph is build inside the mapping docker that resturns the voronoi paths between any two points in our enviuronments, which we call the global plan. The local planner then can then execute these plans. For an interactive system, we encode preferences of where the human is interested in going and then finally plan a tour of environment. The tour planner and the simulation environment are run together in the planning docker. In the given video that is sped up 4x, our tour planner returns the shortest path that is feasible within user constraints and turns them to the global and local planner, that then execute the plan. 
 ![alt text](./small_tour.gif)
 <br />
+
+The framework used has the following components involved.
+
 <center><img src="./Diagram_width.png" width="850"></center>
 
 Our input sensors are RGB-D cameras only, we estimate odometry using a visual odometry pipeline in rtabmap_ros package. The system is amenable to be used with a range of different sensors that may be on board, 3D LiDAR, 2D Laser, IMU, etc. that will only improve the performance further. 
