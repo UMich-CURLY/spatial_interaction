@@ -47,7 +47,7 @@ RUN /bin/bash -c ". activate habitat; cd habitat-sim; pip install -r requirement
 
 # Install challenge specific habitat-lab
 RUN git clone --branch stable https://github.com/facebookresearch/habitat-lab.git
-RUN /bin/bash -c ". activate habitat; cd habitat-lab; pip install -r requirements.txt; python setup.py develop --all; pip install pygame==2.0.1; pip install pybullet==3.0.4; python /habitat_sim/utils/datasets_download.py --uids rearrange_task_assets --data-path /habitat-lab/data/"
+RUN /bin/bash -c ". activate habitat; cd habitat-lab; pip install -r requirements.txt; python setup.py develop --all; pip install pygame==2.0.1; pip install pybullet==3.0.4; python /habitat-sim/habitat_sim/utils/datasets_download.py --uids rearrange_task_assets --data-path /habitat-lab/data/"
 
 # Silence habitat-sim logs
 ENV GLOG_minloglevel=2
