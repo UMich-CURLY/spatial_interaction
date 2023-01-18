@@ -84,3 +84,14 @@ In another terminal inside your docker (docker exec -it <container_id> /bin/bash
 
 
 Finally if you Rviz with the config file in the mapper docker, you should be able to see your robot in the habitat_sim navigation environment. Make sure that robot is well localized and the map is visible before running your tour planner. To start the tour planner, "Publish Point" anywhere in the map. This will show the calculated path for the robots, and also execute them. 
+
+If this code was useful for you consider citing our paper: [[arXiv]](https://arxiv.org/abs/2206.10767)
+```
+@INPROCEEDINGS{9900525,
+  author={Kathuria, Tribhi and Xu, Yifan and Chakhachiro, Theodor and Yang, X. Jessie and Ghaffari, Maani},
+  booktitle={2022 31st IEEE International Conference on Robot and Human Interactive Communication (RO-MAN)}, 
+  title={Providers-Clients-Robots: Framework for spatial-semantic planning for shared understanding in human-robot interaction}, 
+  year={2022},
+  pages={1099-1106},
+  doi={10.1109/RO-MAN53752.2022.9900525}}
+```
