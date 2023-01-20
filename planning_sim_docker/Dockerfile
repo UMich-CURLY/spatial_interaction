@@ -1,5 +1,5 @@
 # Base image
-FROM nvidia/cudagl:10.1-devel-ubuntu16.04
+FROM nvidia/cuda:11.1.1-cudnn8-devel-ubuntu16.04
 
 # Setup basic packages
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -22,14 +22,16 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     unzip &&\
     rm -rf /var/lib/apt/lists/*
 
-# Install conda
-RUN curl -L -o ~/miniconda.sh -O  https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh  &&\
-    chmod +x ~/miniconda.sh &&\
-    ~/miniconda.sh -b -p /opt/conda &&\
-    rm ~/miniconda.sh &&\
-    /opt/conda/bin/conda install numpy pyyaml scipy ipython mkl mkl-include &&\
-    /opt/conda/bin/conda clean -ya
-ENV PATH /opt/conda/bin:$PATH
+#### Install conda new way ####
+
+RUN wget \
+    https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh \
+    && mkdir /root/.conda \
+    && bash Miniconda3-latest-Linux-x86_64.sh -b \
+    && rm -f Miniconda3-latest-Linux-x86_64.sh
+RUN /root/miniconda3/bin/conda install numpy pyyaml scipy ipython mkl mkl-include &&\
+    /root/miniconda3/bin/conda clean -ya 
+ENV PATH /root/miniconda3/bin:$PATH
 
 # Install cmake
 RUN wget https://github.com/Kitware/CMake/releases/download/v3.14.0/cmake-3.14.0-Linux-x86_64.sh
@@ -42,11 +44,11 @@ RUN cmake --version
 RUN conda create -n habitat python=3.7 cmake=3.14.0
 
 # Setup habitat-sim
-RUN git clone --branch stable https://github.com/facebookresearch/habitat-sim.git
+RUN git clone --branch v0.2.2 https://github.com/facebookresearch/habitat-sim.git
 RUN /bin/bash -c ". activate habitat; cd habitat-sim; pip install -r requirements.txt; python setup.py install --headless --bullet"
 
 # Install challenge specific habitat-lab
-RUN git clone --branch stable https://github.com/facebookresearch/habitat-lab.git
+RUN git clone --branch v0.2.2 https://github.com/facebookresearch/habitat-lab.git
 RUN /bin/bash -c ". activate habitat; cd habitat-lab; pip install -r requirements.txt; python setup.py develop --all; pip install pygame==2.0.1; pip install pybullet==3.0.4"
 
 # Silence habitat-sim logs
